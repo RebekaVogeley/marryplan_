@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import br.com.marryplan.dao.TarefasDAO;
 import br.com.marryplan.entidade.Tarefas;
 import br.com.marryplan.service.TarefasService;
@@ -30,16 +31,26 @@ public class TarefasServiceImpl implements TarefasService{
 	}
 
 	@Override
+	@Transactional
 	public void excluir(long id) {
 		dao.excluir(id);
+		
+	}
+	
+	@Override
+	@Transactional
+	public void alterar(TarefasVO tarefasVO) {
+		Tarefas tarefas = Converter.converterVoParaTarefas(tarefasVO);
+		dao.alterar(tarefas);
 		
 	}
 
 	@Override
 	public List<TarefasVO> listarTodos() {
-		return Converter.converterListaTarefasParaListaVo(
-				dao.consultarTodos());
+		List<Tarefas> listaTarefas  = dao.consultarTodos();
+		return Converter.converterListaTarefasParaListaVo(listaTarefas);
 	}
+	
 	
 	@Override
 	public Tarefas consultarTarefasPorId(long id) {

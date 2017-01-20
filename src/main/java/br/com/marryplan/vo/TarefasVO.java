@@ -7,6 +7,7 @@ public class TarefasVO {
 	private long id;
 	private String nome;
 	private boolean status;
+	private String realizado;
 
 	
 	public String getNome() {
@@ -15,13 +16,13 @@ public class TarefasVO {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public boolean isStatus() {
+	
+	public boolean getStatus() {
 		return status;
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
 	public long getId() {
 		return id;
 	}
@@ -29,6 +30,18 @@ public class TarefasVO {
 		this.id = id;
 	}
 	
+	public void setRealizado(String realizado) {
+		this.realizado = realizado;
+	}
 	
+	public String getRealizado() {
+		String label;
+		if(this.getStatus()){
+			label = "Realizado";
+		}else{
+			label = "Não Realizado";
+		}
+		return label;
+	}
 
 }

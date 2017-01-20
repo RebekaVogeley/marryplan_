@@ -6,8 +6,9 @@ import java.util.List;
 
 
 import br.com.marryplan.entidade.Tarefas;
-
+import br.com.marryplan.entidade.Usuario;
 import br.com.marryplan.vo.TarefasVO;
+import br.com.marryplan.vo.UsuarioVO;
 
 public class Converter {
 
@@ -15,7 +16,7 @@ public class Converter {
 		Tarefas tarefas = new Tarefas();
 		tarefas.setId(tarefasVO.getId());
 		tarefas.setNome(tarefasVO.getNome());
-		tarefas.setStatus(tarefasVO.isStatus());
+		tarefas.setStatus(tarefasVO.getStatus());
 
 		return tarefas;
 	}
@@ -42,4 +43,23 @@ public class Converter {
 		return listTarefasVO;
 	}	
 	
+	public static UsuarioVO converterusuarioparavo (Usuario usuario){
+		UsuarioVO usuarioVO = new UsuarioVO();
+		
+		usuarioVO.setId(usuario.getId());
+		usuarioVO.setLogin(usuario.getLogin());
+		usuarioVO.setSenha(usuario.getSenha());
+		
+		return usuarioVO;
+	}
+	
+	public static Usuario convertervoparausuario (UsuarioVO usuarioVO){
+		Usuario usuario = new Usuario();
+		
+		usuario.setId(usuarioVO.getId());
+		usuario.setLogin(usuarioVO.getLogin());
+		usuario.setSenha(usuarioVO.getSenha());
+		
+		return usuario;
+	}
 }

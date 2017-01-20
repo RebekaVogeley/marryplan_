@@ -28,6 +28,12 @@ public class TarefasDAOImpl extends AbstractDAO implements TarefasDAO{
 	}
 	
 	@Override
+	public void alterar(Tarefas tarefas) {
+		this.getEntityManager().merge(tarefas);
+		
+	}
+	
+	@Override
 	public Tarefas consultarPorId(long id) {
 		return super.getEntityManager().find(Tarefas.class, id);
 	}
@@ -40,4 +46,5 @@ public class TarefasDAOImpl extends AbstractDAO implements TarefasDAO{
 		return listarTarefas;
 	}
 
+	
 }

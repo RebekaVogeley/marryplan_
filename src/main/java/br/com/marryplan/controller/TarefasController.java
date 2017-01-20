@@ -2,32 +2,39 @@ package br.com.marryplan.controller;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+
 
 import br.com.marryplan.service.TarefasService;
 import br.com.marryplan.vo.TarefasVO;
 
 
-
-@Controller("tarefasMbean")
-@Scope("session")
-public class TarefasController {
+@ManagedBean(name = "tarefasMbean")
+@SessionScoped
+public class TarefasController extends AbstractController{
 	
+
+	@Autowired
 	private TarefasService tarefasService;
 	private List<TarefasVO> listaTarefasVO;
 	
-	private TarefasVO tarefas = new TarefasVO();
-	
-	@Autowired
-	public TarefasController(TarefasService tarefasService){
-		this.tarefasService = tarefasService;
+	@PostConstruct
+	public void init(){
+		super.getConfigSpring();
+		listaTarefasVO = tarefasService.listarTodos();
 	}
 
+	private TarefasVO tarefas = new TarefasVO();
+	
 	public TarefasVO getTarefas() {
 		return tarefas;
 	}
@@ -42,18 +49,36 @@ public class TarefasController {
 		// Add message
 		FacesContext.getCurrentInstance().addMessage(null, 
 				new FacesMessage("A tarefa "+this.tarefas.getNome()+" foi gravado com sucesso!"));
-		this.limparCampos();
+		listaTarefasVO = tarefasService.listarTodos();
 		return "";
 	}
 	
-	public void getListaProdutoVO() {
-		tarefasService.listarTodos();
-	}
-	
-	private void limparCampos(){
-		this.tarefas = tarefas;
-	
-	}
-	
+	public void alterar(RowEditEvent event) {
 
+		TarefasVO tarefasVOAlterado = ((TarefasVO) event.getObject());
+		tarefasService.alterar(tarefasVOAlterado);
+
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Tarefa alterada com sucesso!"));
+
+	}
+
+	public List<TarefasVO> getListaTarefasVO() {
+		return listaTarefasVO;
+	}
+
+	public void setListaTarefasVO(List<TarefasVO> listaTarefasVO) {
+		this.listaTarefasVO = listaTarefasVO;
+	}
+	
+	public String excluir(TarefasVO tarefasVO) {
+		if (tarefasVO != null && tarefasVO.getId() != 0) {
+			this.tarefasService.excluir(tarefasVO.getId());
+		}
+		this.listaTarefasVO = tarefasService.listarTodos();
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Tarefa excluida com sucesso!"));
+		return "";
+	}
+	
 }
